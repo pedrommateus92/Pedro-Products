@@ -7,7 +7,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Products.Application\Products.Application.csproj" />
-    <ProjectReference Include="..\Products.Infrastructure\Products.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Core\Products.Application\Products.Application.csproj" />
+    <ProjectReference Include="..\..\Core\Products.Infrastructure\Products.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

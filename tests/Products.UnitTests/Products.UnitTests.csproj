@@ -12,6 +12,6 @@
     <Using Include="Xunit" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Products.Application\Products.Application.csproj" />
+    <ProjectReference Include="..\..\src\Core\Products.Application\Products.Application.csproj" />
   </ItemGroup>
 </Project>

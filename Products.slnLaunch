@@ -1,14 +1,14 @@
 [
   {
-    "Name": "Api + WebApp",
+    "Name": "WebApi + WebApp",
     "Projects": [
       {
-        "Path": "src\\Products.Api\\Products.Api.csproj",
+        "Path": "src\\Web\\Products.WebApi\\Products.WebApi.csproj",
         "Action": "Start",
         "DebugTarget": "http"
       },
       {
-        "Path": "frontend\\Products.WebApp.esproj",
+        "Path": "src\\Web\\Products.WebApp\\Products.WebApp.esproj",
         "Action": "StartWithoutDebugging"
       }
     ]

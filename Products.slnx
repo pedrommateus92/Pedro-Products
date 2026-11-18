@@ -1,21 +1,24 @@
 <Solution>
-  <Folder Name="/Solution Items/">
+  <Folder Name="/Core/">
+    <Project Path="src/Core/Products.Domain/Products.Domain.csproj" />
+    <Project Path="src/Core/Products.Application/Products.Application.csproj" />
+    <Project Path="src/Core/Products.Infrastructure/Products.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Other/">
     <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
     <File Path="global.json" />
+    <File Path="Products.slnLaunch" />
     <File Path="README.md" />
   </Folder>
-  <Folder Name="/src/">
-    <Project Path="src/Products.Domain/Products.Domain.csproj" />
-    <Project Path="src/Products.Application/Products.Application.csproj" />
-    <Project Path="src/Products.Infrastructure/Products.Infrastructure.csproj" />
-    <Project Path="src/Products.Api/Products.Api.csproj" />
-  </Folder>
-  <Folder Name="/frontend/">
-    <Project Path="frontend/Products.WebApp.esproj" />
-  </Folder>
-  <Folder Name="/tests/">
+  <Folder Name="/Tests/">
     <Project Path="tests/Products.UnitTests/Products.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/Web/">
+    <Project Path="src/Web/Products.WebApi/Products.WebApi.csproj" />
+    <Project Path="src/Web/Products.WebApp/Products.WebApp.esproj" />
   </Folder>
 </Solution>
