@@ -15,7 +15,7 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/Tests/">
-    <Project Path="tests/Products.UnitTests/Products.UnitTests.csproj" />
+    <Project Path="Tests/Products.UnitTests/Products.UnitTests.csproj" />
   </Folder>
   <Folder Name="/Web/">
     <Project Path="Web/Products.WebApi/Products.WebApi.csproj" />
