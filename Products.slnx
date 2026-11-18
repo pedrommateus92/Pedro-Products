@@ -1,7 +1,7 @@
 <Solution>
   <Folder Name="/Core/">
-    <Project Path="src/Core/Products.Domain/Products.Domain.csproj" />
     <Project Path="src/Core/Products.Application/Products.Application.csproj" />
+    <Project Path="src/Core/Products.Domain/Products.Domain.csproj" />
     <Project Path="src/Core/Products.Infrastructure/Products.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/Other/">
@@ -19,6 +19,9 @@
   </Folder>
   <Folder Name="/Web/">
     <Project Path="src/Web/Products.WebApi/Products.WebApi.csproj" />
-    <Project Path="src/Web/Products.WebApp/Products.WebApp.esproj" />
+    <Project Path="src/Web/Products.WebApp/Products.WebApp.esproj">
+      <Build />
+      <Deploy />
+    </Project>
   </Folder>
 </Solution>
