@@ -1,0 +1,33 @@
+@baseUrl = http://localhost:5080
+
+GET {{baseUrl}}/api/products
+
+###
+GET {{baseUrl}}/api/products/100001
+
+###
+POST {{baseUrl}}/api/products
+Content-Type: application/json
+
+{ "name": "Keyboard", "description": "Mechanical", "price": 49.90, "stock": 5 }
+
+###
+PUT {{baseUrl}}/api/products/100001
+Content-Type: application/json
+
+{ "name": "Keyboard", "description": "Mechanical", "price": 39.90, "stock": 5 }
+
+###
+DELETE {{baseUrl}}/api/products/100001
+
+###
+POST {{baseUrl}}/api/products/100001/decrement-stock/2
+
+###
+POST {{baseUrl}}/api/products/100001/add-to-stock/3
+
+###
+GET {{baseUrl}}/api/products/search?name=key
+
+###
+GET {{baseUrl}}/api/products/stock-level?min=1&max=10
