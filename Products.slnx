@@ -12,6 +12,9 @@
     <Project Path="src/Products.Infrastructure/Products.Infrastructure.csproj" />
     <Project Path="src/Products.Api/Products.Api.csproj" />
   </Folder>
+  <Folder Name="/frontend/">
+    <Project Path="frontend/Products.WebApp.esproj" />
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Products.UnitTests/Products.UnitTests.csproj" />
   </Folder>

@@ -13,7 +13,7 @@ REST API for managing products, built with ASP.NET Core on .NET 10, with an Angu
 | `src/Products.Infrastructure` | Service implementations, later data access |
 | `src/Products.Api` | HTTP controllers, OpenAPI, Swagger UI |
 | `tests/Products.UnitTests` | Unit tests (xUnit v3) |
-| `frontend` | Angular app (standalone components, signals, Angular Material) |
+| `frontend` | Angular app (standalone components, signals, Angular Material), included in the solution as `Products.WebApp.esproj` |
 
 ## Requirements
 
@@ -39,6 +39,8 @@ npm start
 ```
 
 Then open http://localhost:4200. The dev server proxies `/api` to the API on port 5080 (see `frontend/proxy.conf.json`).
+
+In Visual Studio, pick the **Api + WebApp** startup profile (from `Products.slnLaunch`) to start both with F5.
 
 ## Endpoints
 
