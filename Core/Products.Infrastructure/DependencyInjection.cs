@@ -1,13 +1,26 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Products.Application.Products;
+using Products.Infrastructure.Persistence;
 using Products.Infrastructure.Products;
 
 namespace Products.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+    public const string ConnectionStringName = "ProductsDb";
+
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        var connectionString = configuration.GetConnectionString(ConnectionStringName)
+            ?? throw new InvalidOperationException($"Connection string '{ConnectionStringName}' is not configured.");
+
+        services.AddDbContext<ProductsDbContext>(options => options
+            .UseSqlServer(connectionString)
+            .UseSeeding((context, _) => ProductSeeder.Seed(context))
+            .UseAsyncSeeding((context, _, cancellationToken) => ProductSeeder.SeedAsync(context, cancellationToken)));
+
         services.AddScoped<IProductService, PlaceholderProductService>();
         return services;
     }

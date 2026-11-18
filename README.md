@@ -2,7 +2,7 @@
 
 A products management solution: a REST API built with ASP.NET Core on .NET 10, and an Angular web app.
 
-> Work in progress: the API currently returns placeholder data. Persistence (SQL Server + EF Core) comes next.
+> Work in progress: the database is in place, but the API endpoints still return placeholder data until the service is wired to it.
 
 ## Solution structure
 
@@ -32,6 +32,28 @@ The solution folders match the folders on disk. The files under the **Other** so
 - .NET 10 runtime and a .NET SDK 10 or newer
 - Node.js 22 or newer and npm
 - Visual Studio 2022 17.10+ or Visual Studio 2026 with the **ASP.NET and web development** workload (optional, for F5)
+- SQL Server 2025 (Developer edition) as the default local instance, reachable with Windows authentication
+
+## Database
+
+The API uses EF Core with SQL Server. The connection string `ProductsDb` in `Web/Products.WebApi/appsettings.Development.json` points at `localhost`, database `ProductsDb`, with Windows authentication, so it holds no secrets. To use another server, override it with user secrets:
+
+```powershell
+dotnet user-secrets set "ConnectionStrings:ProductsDb" "<connection string>" --project Web/Products.WebApi
+```
+
+In Development the API applies pending migrations and seeds five sample products on startup, so running it is enough to create the database. To do it by hand:
+
+```powershell
+dotnet tool restore
+dotnet ef database update --project Core/Products.Infrastructure --startup-project Web/Products.WebApi
+```
+
+Product IDs come from the SQL Server sequence `ProductIds` (100000 to 999999), so they are unique even with several API instances writing at once. Migrations live in `Core/Products.Infrastructure/Persistence/Migrations`. To add one:
+
+```powershell
+dotnet ef migrations add <Name> --project Core/Products.Infrastructure --startup-project Web/Products.WebApi --output-dir Persistence/Migrations
+```
 
 ## Build
 
