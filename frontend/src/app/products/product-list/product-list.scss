@@ -1,0 +1,16 @@
+h1 {
+  font: var(--mat-sys-headline-small);
+  margin: 0 0 16px;
+}
+
+table {
+  width: 100%;
+}
+
+.numeric {
+  text-align: right;
+}
+
+.error {
+  color: var(--mat-sys-error);
+}
