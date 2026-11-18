@@ -12,10 +12,11 @@ Content-Type: application/json
 { "name": "Keyboard", "description": "Mechanical", "price": 49.90, "stock": 5 }
 
 ###
+# Use the rowVersion returned by the latest GET of the product
 PUT {{baseUrl}}/api/products/100001
 Content-Type: application/json
 
-{ "name": "Keyboard", "description": "Mechanical", "price": 39.90, "stock": 5 }
+{ "name": "Wireless Mouse", "description": "Ergonomic mouse with USB-C charging", "price": 35.00, "stock": 60, "rowVersion": "<rowVersion>" }
 
 ###
 DELETE {{baseUrl}}/api/products/100001

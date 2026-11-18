@@ -4,6 +4,7 @@ export interface Product {
   description: string | null;
   price: number;
   stock: number;
+  rowVersion: string;
 }
 
 export interface CreateProductRequest {
@@ -13,4 +14,6 @@ export interface CreateProductRequest {
   stock: number;
 }
 
-export type UpdateProductRequest = CreateProductRequest;
+export interface UpdateProductRequest extends CreateProductRequest {
+  rowVersion: string;
+}

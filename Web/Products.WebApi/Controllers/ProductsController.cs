@@ -35,6 +35,7 @@ public sealed class ProductsController(IProductService productService) : Control
     [ProducesResponseType<ProductResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<ProductResponse>> Update(int id, UpdateProductRequest request, CancellationToken cancellationToken)
     {
         var product = await productService.UpdateAsync(id, request, cancellationToken);
@@ -49,8 +50,9 @@ public sealed class ProductsController(IProductService productService) : Control
 
     [HttpPost("{id:int}/decrement-stock/{quantity:int}")]
     [ProducesResponseType<ProductResponse>(StatusCodes.Status200OK)]
-    [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<ProductResponse>> DecrementStock(int id, int quantity, CancellationToken cancellationToken)
     {
         var product = await productService.DecrementStockAsync(id, quantity, cancellationToken);
@@ -59,8 +61,9 @@ public sealed class ProductsController(IProductService productService) : Control
 
     [HttpPost("{id:int}/add-to-stock/{quantity:int}")]
     [ProducesResponseType<ProductResponse>(StatusCodes.Status200OK)]
-    [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<ProductResponse>> AddToStock(int id, int quantity, CancellationToken cancellationToken)
     {
         var product = await productService.AddToStockAsync(id, quantity, cancellationToken);
@@ -69,10 +72,11 @@ public sealed class ProductsController(IProductService productService) : Control
 
     [HttpGet("search")]
     [ProducesResponseType<IReadOnlyList<ProductResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IReadOnlyList<ProductResponse>>> SearchByName(
-        [FromQuery] string name,
+        [FromQuery] string? name,
         CancellationToken cancellationToken) =>
-        Ok(await productService.SearchByNameAsync(name, cancellationToken));
+        Ok(await productService.SearchByNameAsync(name ?? string.Empty, cancellationToken));
 
     [HttpGet("stock-level")]
     [ProducesResponseType<IReadOnlyList<ProductResponse>>(StatusCodes.Status200OK)]

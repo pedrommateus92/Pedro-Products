@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Products.Application.Products;
 using Products.Infrastructure.Persistence;
-using Products.Infrastructure.Products;
 
 namespace Products.Infrastructure;
 
@@ -21,7 +20,7 @@ public static class DependencyInjection
             .UseSeeding((context, _) => ProductSeeder.Seed(context))
             .UseAsyncSeeding((context, _, cancellationToken) => ProductSeeder.SeedAsync(context, cancellationToken)));
 
-        services.AddScoped<IProductService, PlaceholderProductService>();
+        services.AddScoped<IProductRepository, ProductRepository>();
         return services;
     }
 }

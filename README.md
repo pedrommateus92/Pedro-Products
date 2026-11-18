@@ -2,7 +2,7 @@
 
 A products management solution: a REST API built with ASP.NET Core on .NET 10, and an Angular web app.
 
-> Work in progress: the database is in place, but the API endpoints still return placeholder data until the service is wired to it.
+> Work in progress: the API is backed by SQL Server. Frontend features and tests come next.
 
 ## Solution structure
 
@@ -14,7 +14,7 @@ Core/
 Web/
 ├── Products.WebApi             ASP.NET Core API, OpenAPI, Swagger UI
 └── Products.WebApp             Angular app (Visual Studio JavaScript project, .esproj)
-tests/
+Tests/
 └── Products.UnitTests          Unit tests (xUnit v3)
 Products.slnx                   Solution, with the folders Core, Web, Tests and Other
 ```
@@ -124,6 +124,14 @@ Then open:
 | POST | `/api/products/{id}/add-to-stock/{quantity}` |
 | GET | `/api/products/search?name=` |
 | GET | `/api/products/stock-level?min=&max=` |
+
+## Tests
+
+Unit tests (xUnit v3) cover the product service and the request validators. The service runs against an in-memory fake of `IProductRepository`, so no database is needed. From the repository root:
+
+```powershell
+dotnet test --project Tests/Products.UnitTests
+```
 
 ## Code quality
 
