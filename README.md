@@ -7,20 +7,19 @@ A products management solution: a REST API built with ASP.NET Core on .NET 10, a
 ## Solution structure
 
 ```
-Products.slnx
-├── Core
-│   ├── src/Core/Products.Domain           Entities
-│   ├── src/Core/Products.Application      DTOs and service contracts
-│   └── src/Core/Products.Infrastructure   Service implementations, later data access
-├── Web
-│   ├── src/Web/Products.WebApi            ASP.NET Core API, OpenAPI, Swagger UI
-│   └── src/Web/Products.WebApp            Angular app (Visual Studio JavaScript project, .esproj)
-├── Tests
-│   └── tests/Products.UnitTests           Unit tests (xUnit v3)
-└── Other                                  Repo-root files: build settings, editor config, launch profile, README
+Core/
+├── Products.Domain             Entities
+├── Products.Application        DTOs and service contracts
+└── Products.Infrastructure     Service implementations, later data access
+Web/
+├── Products.WebApi             ASP.NET Core API, OpenAPI, Swagger UI
+└── Products.WebApp             Angular app (Visual Studio JavaScript project, .esproj)
+tests/
+└── Products.UnitTests          Unit tests (xUnit v3)
+Products.slnx                   Solution, with the folders Core, Web, Tests and Other
 ```
 
-The files under **Other** (`Directory.Build.props`, `Directory.Packages.props`, `global.json`, `.editorconfig`) stay at the repository root on disk because the build and editors look for them there.
+The solution folders match the folders on disk. The files under the **Other** solution folder (`Directory.Build.props`, `Directory.Packages.props`, `global.json`, `.editorconfig`) stay at the repository root on disk because the build and editors look for them there.
 
 | Area | Technology |
 | --- | --- |
@@ -44,20 +43,20 @@ Backend, from the repository root:
 dotnet build Products.slnx
 ```
 
-Frontend, from `src/Web/Products.WebApp` (`npm install` is only needed the first time or after package changes):
+Frontend, from `Web/Products.WebApp` (`npm install` is only needed the first time or after package changes):
 
 ```powershell
 npm install
 npm run build
 ```
 
-The frontend output goes to `src/Web/Products.WebApp/dist/products-web/browser`. In Visual Studio, **Build > Build Solution** (Ctrl+Shift+B) builds the backend.
+The frontend output goes to `Web/Products.WebApp/dist/products-web/browser`. In Visual Studio, **Build > Build Solution** (Ctrl+Shift+B) builds the backend.
 
 Stop a running API before building, otherwise Windows locks its output files.
 
 ## Run the solution
 
-The API listens on http://localhost:5080 and the web app on http://localhost:4200. The Angular dev server proxies `/api` calls to the API (see `src/Web/Products.WebApp/proxy.conf.json`), so both must be running.
+The API listens on http://localhost:5080 and the web app on http://localhost:4200. The Angular dev server proxies `/api` calls to the API (see `Web/Products.WebApp/proxy.conf.json`), so both must be running.
 
 ### Visual Studio
 
@@ -71,13 +70,13 @@ The API listens on http://localhost:5080 and the web app on http://localhost:420
 Terminal 1, the API:
 
 ```powershell
-dotnet run --project src/Web/Products.WebApi
+dotnet run --project Web/Products.WebApi
 ```
 
 Terminal 2, the web app (run `npm install` the first time):
 
 ```powershell
-cd src/Web/Products.WebApp
+cd Web/Products.WebApp
 npm install
 npm start
 ```
@@ -88,7 +87,7 @@ Then open:
 - Swagger UI: http://localhost:5080/swagger
 - OpenAPI document: http://localhost:5080/openapi/v1.json
 
-`src/Web/Products.WebApi/Products.WebApi.http` has a ready-made request for every endpoint.
+`Web/Products.WebApi/Products.WebApi.http` has a ready-made request for every endpoint.
 
 ## API endpoints
 
@@ -112,7 +111,7 @@ From the repository root:
 dotnet format --verify-no-changes
 ```
 
-From `src/Web/Products.WebApp`:
+From `Web/Products.WebApp`:
 
 ```powershell
 npm run lint
