@@ -9,13 +9,14 @@ A products management solution: a REST API built with ASP.NET Core on .NET 10, a
 ```
 Core/
 ├── Products.Domain             Entities
-├── Products.Application        DTOs and service contracts
-└── Products.Infrastructure     Service implementations, later data access
+├── Products.Application        DTOs, validation, product service, repository contract
+└── Products.Infrastructure     EF Core: DbContext, migrations, repository, seeding
 Web/
 ├── Products.WebApi             ASP.NET Core API, OpenAPI, Swagger UI
 └── Products.WebApp             Angular app (Visual Studio JavaScript project, .esproj)
 Tests/
-└── Products.UnitTests          Unit tests (xUnit v3)
+├── Products.IntegrationTests   Repository tests against SQL Server (xUnit v3)
+└── Products.UnitTests          Service and validator tests (xUnit v3)
 Products.slnx                   Solution, with the folders Core, Web, Tests and Other
 ```
 
@@ -127,10 +128,20 @@ Then open:
 
 ## Tests
 
-Unit tests (xUnit v3) cover the product service and the request validators. The service runs against an in-memory fake of `IProductRepository`, so no database is needed. From the repository root:
+All tests use xUnit v3. Run everything from the repository root:
+
+```powershell
+dotnet test --solution Products.slnx
+```
+
+- **Unit tests** (`Tests/Products.UnitTests`) cover the product service and the request validators. The service runs against an in-memory fake of `IProductRepository`, so no database is needed.
+- **Integration tests** (`Tests/Products.IntegrationTests`) run the EF Core repository against a real SQL Server: sequence IDs, atomic stock changes under concurrent requests, row-version conflicts, search and range queries, and database constraints. Each run creates a throwaway database named `ProductsDb_Tests_<guid>`, applies the migrations and drops it at the end. They use the local default instance with Windows authentication; set `PRODUCTS_TEST_SQLSERVER` to a connection string to point them at another server.
+
+To run one project:
 
 ```powershell
 dotnet test --project Tests/Products.UnitTests
+dotnet test --project Tests/Products.IntegrationTests
 ```
 
 ## Code quality
