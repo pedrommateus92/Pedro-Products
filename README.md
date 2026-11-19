@@ -144,6 +144,30 @@ dotnet test --project Tests/Products.UnitTests
 dotnet test --project Tests/Products.IntegrationTests
 ```
 
+### Web app tests
+
+Unit and component tests live next to the code as `*.spec.ts` files. From `Web/Products.WebApp`:
+
+```powershell
+npm test
+npm run test:watch
+npm run test:coverage
+```
+
+They cover the `ProductService` HTTP calls, the error helpers, the create/edit and stock dialogs, and the product list (search, stock filter, pagination, error and empty states, delete confirmation). The coverage report is written to `Web/Products.WebApp/coverage`.
+
+Why each tool:
+
+| Tool | Why |
+| --- | --- |
+| **Vitest** | Angular's default test runner since v21, run through `ng test` (`@angular/build:unit-test`), so it uses the same build as the app. Fast, watch mode built in, Jest-style API. Replaces Karma, which Angular deprecated. |
+| **jsdom** | The browser-like DOM Vitest runs the components in, without starting a real browser. |
+| **Angular Testing Library** | Renders a component and finds elements the way a user does (by role, label, visible text) instead of by CSS classes or component internals, so tests survive refactors and double as a basic accessibility check. |
+| **@testing-library/user-event** | Simulates real typing and clicking (focus, key presses, input events) rather than setting values directly, so form validation and debounced search behave as in the browser. |
+| **@testing-library/jest-dom** | Readable DOM assertions such as `toBeInTheDocument`, `toBeDisabled`, `toHaveValue`, `toHaveTextContent`. |
+| **@vitest/coverage-v8** | Coverage from V8's built-in instrumentation, used by `ng test --coverage`. No extra build step. |
+| **HttpTestingController** | Angular's own HTTP test double. Tests assert the exact method, URL, query and body the app sends and reply with chosen responses, including 400 and 409 problem details, without a server. |
+
 ## Code quality
 
 From the repository root:

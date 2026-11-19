@@ -91,6 +91,16 @@
           "options": {
             "proxyConfig": "proxy.conf.json"
           }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "tsconfig.spec.json",
+            "runner": "vitest",
+            "setupFiles": ["src/test-setup.ts"],
+            "coverageReporters": ["text-summary", "html"],
+            "coverageExclude": ["src/main.ts", "src/**/*.spec.ts", "src/test-setup.ts"]
+          }
         }
       }
     }
