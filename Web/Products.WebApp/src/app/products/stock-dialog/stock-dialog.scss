@@ -1,0 +1,10 @@
+.fields {
+  display: flex;
+  flex-direction: column;
+  min-width: min(360px, 80vw);
+}
+
+.form-error {
+  color: var(--mat-sys-error);
+  margin: 0 0 8px;
+}

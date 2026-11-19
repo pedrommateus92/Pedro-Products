@@ -2,7 +2,7 @@
 
 A products management solution: a REST API built with ASP.NET Core on .NET 10, and an Angular web app.
 
-> Work in progress: the API is backed by SQL Server. Frontend features and tests come next.
+> The web app supports listing with search, stock filter and pagination, creating and editing products, deleting with confirmation, and adding or removing stock. Search and stock filter can be combined: the API searches by name and the stock range is applied to those results in the browser. Pagination happens in the browser.
 
 ## Solution structure
 
