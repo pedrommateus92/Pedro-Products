@@ -4,12 +4,12 @@ import { TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-import { aProduct } from '../../../testing/test-data';
+import { mockProduct } from '../../../testing/test-data';
 import { StockDialog, StockDialogData, StockOperation } from './stock-dialog';
 
 async function setup(operation: StockOperation, stock = 2) {
   const close = vi.fn();
-  const data: StockDialogData = { product: aProduct({ stock }), operation };
+  const data: StockDialogData = { product: mockProduct({ stock }), operation };
   await render(StockDialog, {
     providers: [
       provideHttpClient(),
@@ -61,7 +61,7 @@ describe('StockDialog', () => {
     await user.type(quantity, '5');
     await user.click(screen.getByRole('button', { name: 'Add' }));
 
-    const updated = aProduct({ stock: 7 });
+    const updated = mockProduct({ stock: 7 });
     http.expectOne({ method: 'POST', url: '/api/products/100000/add-to-stock/5' }).flush(updated);
 
     expect(close).toHaveBeenCalledWith(updated);

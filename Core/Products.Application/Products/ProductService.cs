@@ -9,7 +9,7 @@ internal sealed class ProductService(
     IValidator<UpdateProductRequest> updateValidator) : IProductService
 {
     public async Task<IReadOnlyList<ProductResponse>> GetAllAsync(CancellationToken cancellationToken) =>
-        (await repository.ListAsync(cancellationToken)).ToResponses();
+        (await repository.GetAllAsync(cancellationToken)).ToResponses();
 
     public async Task<ProductResponse?> GetByIdAsync(int id, CancellationToken cancellationToken) =>
         (await repository.GetByIdAsync(id, cancellationToken))?.ToResponse();
@@ -35,16 +35,14 @@ internal sealed class ProductService(
     public Task<bool> DeleteAsync(int id, CancellationToken cancellationToken) =>
         repository.DeleteAsync(id, cancellationToken);
 
-    public async Task<ProductResponse?> DecrementStockAsync(int id, int quantity, CancellationToken cancellationToken)
+    public async Task<ProductResponse?> DecreaseStockAsync(int id, int quantity, CancellationToken cancellationToken)
     {
         EnsurePositiveQuantity(quantity);
 
-        if (!await repository.TryDecrementStockAsync(id, quantity, cancellationToken))
+        if (!await repository.DecreaseStockAsync(id, quantity, cancellationToken))
         {
             if (!await repository.ExistsAsync(id, cancellationToken))
-            {
                 return null;
-            }
 
             throw new ConflictException($"Insufficient stock to remove {quantity} unit(s) from product {id}.");
         }
@@ -52,16 +50,14 @@ internal sealed class ProductService(
         return await GetByIdAsync(id, cancellationToken);
     }
 
-    public async Task<ProductResponse?> AddToStockAsync(int id, int quantity, CancellationToken cancellationToken)
+    public async Task<ProductResponse?> AddStockAsync(int id, int quantity, CancellationToken cancellationToken)
     {
         EnsurePositiveQuantity(quantity);
 
-        if (!await repository.TryIncrementStockAsync(id, quantity, cancellationToken))
+        if (!await repository.IncreaseStockAsync(id, quantity, cancellationToken))
         {
             if (!await repository.ExistsAsync(id, cancellationToken))
-            {
                 return null;
-            }
 
             throw new ConflictException($"Adding {quantity} unit(s) would exceed the maximum stock for product {id}.");
         }
@@ -69,47 +65,35 @@ internal sealed class ProductService(
         return await GetByIdAsync(id, cancellationToken);
     }
 
-    public async Task<IReadOnlyList<ProductResponse>> SearchByNameAsync(string name, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<ProductResponse>> GetByNameAsync(string name, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(name))
-        {
             throw new ValidationException([new ValidationFailure("Name", "'Name' must not be empty.")]);
-        }
 
-        return (await repository.SearchByNameAsync(name.Trim(), cancellationToken)).ToResponses();
+        return (await repository.GetByNameAsync(name.Trim(), cancellationToken)).ToResponses();
     }
 
-    public async Task<IReadOnlyList<ProductResponse>> GetByStockLevelAsync(int min, int max, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<ProductResponse>> GetStockByRangeAsync(int min, int max, CancellationToken cancellationToken)
     {
         List<ValidationFailure> failures = [];
         if (min < 0)
-        {
             failures.Add(new ValidationFailure("Min", "'Min' must be greater than or equal to 0."));
-        }
 
         if (max < 0)
-        {
             failures.Add(new ValidationFailure("Max", "'Max' must be greater than or equal to 0."));
-        }
 
         if (min > max)
-        {
             failures.Add(new ValidationFailure("Min", "'Min' must be less than or equal to 'Max'."));
-        }
 
         if (failures.Count > 0)
-        {
             throw new ValidationException(failures);
-        }
 
-        return (await repository.ListByStockRangeAsync(min, max, cancellationToken)).ToResponses();
+        return (await repository.GetStockByRangeAsync(min, max, cancellationToken)).ToResponses();
     }
 
     private static void EnsurePositiveQuantity(int quantity)
     {
         if (quantity <= 0)
-        {
             throw new ValidationException([new ValidationFailure("Quantity", "'Quantity' must be greater than 0.")]);
-        }
     }
 }

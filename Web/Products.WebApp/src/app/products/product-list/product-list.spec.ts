@@ -3,13 +3,13 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { render, screen, waitFor, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-import { aProduct } from '../../../testing/test-data';
+import { mockProduct } from '../../../testing/test-data';
 import { Product } from '../product.model';
 import { ProductList } from './product-list';
 
-const keyboard = aProduct({ id: 100000, name: 'Mechanical Keyboard', stock: 25 });
-const mouse = aProduct({ id: 100001, name: 'Wireless Mouse', stock: 60 });
-const hub = aProduct({ id: 100003, name: 'USB-C Hub', stock: 0 });
+const keyboard = mockProduct({ id: 100000, name: 'Mechanical Keyboard', stock: 25 });
+const mouse = mockProduct({ id: 100001, name: 'Wireless Mouse', stock: 60 });
+const hub = mockProduct({ id: 100003, name: 'USB-C Hub', stock: 0 });
 
 async function setup() {
   await render(ProductList, { providers: [provideHttpClient(), provideHttpClientTesting()] });
@@ -25,7 +25,7 @@ function rowNames(): string[] {
 
 function many(count: number): Product[] {
   return Array.from({ length: count }, (_, i) =>
-    aProduct({ id: 100000 + i, name: `Product ${i + 1}`, stock: i }),
+    mockProduct({ id: 100000 + i, name: `Product ${i + 1}`, stock: i }),
   );
 }
 

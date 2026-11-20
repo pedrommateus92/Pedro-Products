@@ -53,9 +53,9 @@ public sealed class ProductsController(IProductService productService) : Control
     [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
-    public async Task<ActionResult<ProductResponse>> DecrementStock(int id, int quantity, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProductResponse>> DecreaseStock(int id, int quantity, CancellationToken cancellationToken)
     {
-        var product = await productService.DecrementStockAsync(id, quantity, cancellationToken);
+        var product = await productService.DecreaseStockAsync(id, quantity, cancellationToken);
         return product is null ? NotFound() : Ok(product);
     }
 
@@ -64,26 +64,26 @@ public sealed class ProductsController(IProductService productService) : Control
     [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
-    public async Task<ActionResult<ProductResponse>> AddToStock(int id, int quantity, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProductResponse>> AddStock(int id, int quantity, CancellationToken cancellationToken)
     {
-        var product = await productService.AddToStockAsync(id, quantity, cancellationToken);
+        var product = await productService.AddStockAsync(id, quantity, cancellationToken);
         return product is null ? NotFound() : Ok(product);
     }
 
     [HttpGet("search")]
     [ProducesResponseType<IReadOnlyList<ProductResponse>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<IReadOnlyList<ProductResponse>>> SearchByName(
+    public async Task<ActionResult<IReadOnlyList<ProductResponse>>> GetByName(
         [FromQuery] string? name,
         CancellationToken cancellationToken) =>
-        Ok(await productService.SearchByNameAsync(name ?? string.Empty, cancellationToken));
+        Ok(await productService.GetByNameAsync(name ?? string.Empty, cancellationToken));
 
     [HttpGet("stock-level")]
     [ProducesResponseType<IReadOnlyList<ProductResponse>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<IReadOnlyList<ProductResponse>>> GetByStockLevel(
+    public async Task<ActionResult<IReadOnlyList<ProductResponse>>> GetByStock(
         [FromQuery] int min,
         [FromQuery] int max,
         CancellationToken cancellationToken) =>
-        Ok(await productService.GetByStockLevelAsync(min, max, cancellationToken));
+        Ok(await productService.GetStockByRangeAsync(min, max, cancellationToken));
 }

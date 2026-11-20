@@ -4,13 +4,13 @@ namespace Products.Application.Products;
 
 public interface IProductRepository
 {
-    Task<IReadOnlyList<Product>> ListAsync(CancellationToken cancellationToken);
+    Task<IReadOnlyList<Product>> GetAllAsync(CancellationToken cancellationToken);
 
     Task<Product?> GetByIdAsync(int id, CancellationToken cancellationToken);
 
-    Task<IReadOnlyList<Product>> SearchByNameAsync(string name, CancellationToken cancellationToken);
+    Task<IReadOnlyList<Product>> GetByNameAsync(string name, CancellationToken cancellationToken);
 
-    Task<IReadOnlyList<Product>> ListByStockRangeAsync(int min, int max, CancellationToken cancellationToken);
+    Task<IReadOnlyList<Product>> GetStockByRangeAsync(int min, int max, CancellationToken cancellationToken);
 
     Task AddAsync(Product product, CancellationToken cancellationToken);
 
@@ -29,11 +29,11 @@ public interface IProductRepository
     /// Atomically subtracts <paramref name="quantity"/> when at least that much is in stock.
     /// </summary>
     /// <returns>True when the stock was decremented.</returns>
-    Task<bool> TryDecrementStockAsync(int id, int quantity, CancellationToken cancellationToken);
+    Task<bool> DecreaseStockAsync(int id, int quantity, CancellationToken cancellationToken);
 
     /// <summary>
     /// Atomically adds <paramref name="quantity"/> unless the result would overflow.
     /// </summary>
     /// <returns>True when the stock was incremented.</returns>
-    Task<bool> TryIncrementStockAsync(int id, int quantity, CancellationToken cancellationToken);
+    Task<bool> IncreaseStockAsync(int id, int quantity, CancellationToken cancellationToken);
 }

@@ -19,7 +19,6 @@ internal sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.HasKey(p => p.Id);
 
-        // The database hands out IDs, so concurrent API instances never produce duplicates.
         builder.Property(p => p.Id).UseSequence(IdSequenceName);
 
         builder.Property(p => p.Name).HasMaxLength(Product.NameMaxLength).IsRequired();

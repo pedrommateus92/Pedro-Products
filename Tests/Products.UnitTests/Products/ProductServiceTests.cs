@@ -119,7 +119,7 @@ public sealed class ProductServiceTests
     {
         var product = repository.Seed("Keyboard", stock: 5);
 
-        var updated = await service.DecrementStockAsync(product.Id, 5, cancellationToken);
+        var updated = await service.DecreaseStockAsync(product.Id, 5, cancellationToken);
 
         Assert.Equal(0, updated?.Stock);
     }
@@ -129,14 +129,14 @@ public sealed class ProductServiceTests
     {
         var product = repository.Seed("Keyboard", stock: 2);
 
-        await Assert.ThrowsAsync<ConflictException>(() => service.DecrementStockAsync(product.Id, 3, cancellationToken));
+        await Assert.ThrowsAsync<ConflictException>(() => service.DecreaseStockAsync(product.Id, 3, cancellationToken));
         Assert.Equal(2, repository.Find(product.Id)?.Stock);
     }
 
     [Fact]
     public async Task DecrementStockAsync_UnknownId_ReturnsNull()
     {
-        var updated = await service.DecrementStockAsync(999999, 1, cancellationToken);
+        var updated = await service.DecreaseStockAsync(999999, 1, cancellationToken);
 
         Assert.Null(updated);
     }
@@ -146,7 +146,7 @@ public sealed class ProductServiceTests
     {
         var product = repository.Seed("Keyboard", stock: 5);
 
-        var updated = await service.AddToStockAsync(product.Id, 10, cancellationToken);
+        var updated = await service.AddStockAsync(product.Id, 10, cancellationToken);
 
         Assert.Equal(15, updated?.Stock);
     }
@@ -156,13 +156,13 @@ public sealed class ProductServiceTests
     {
         var product = repository.Seed("Keyboard", stock: int.MaxValue);
 
-        await Assert.ThrowsAsync<ConflictException>(() => service.AddToStockAsync(product.Id, 1, cancellationToken));
+        await Assert.ThrowsAsync<ConflictException>(() => service.AddStockAsync(product.Id, 1, cancellationToken));
     }
 
     [Fact]
     public async Task AddToStockAsync_UnknownId_ReturnsNull()
     {
-        var updated = await service.AddToStockAsync(999999, 1, cancellationToken);
+        var updated = await service.AddStockAsync(999999, 1, cancellationToken);
 
         Assert.Null(updated);
     }
@@ -174,8 +174,8 @@ public sealed class ProductServiceTests
     {
         var product = repository.Seed("Keyboard", stock: 5);
 
-        await Assert.ThrowsAsync<ValidationException>(() => service.DecrementStockAsync(product.Id, quantity, cancellationToken));
-        await Assert.ThrowsAsync<ValidationException>(() => service.AddToStockAsync(product.Id, quantity, cancellationToken));
+        await Assert.ThrowsAsync<ValidationException>(() => service.DecreaseStockAsync(product.Id, quantity, cancellationToken));
+        await Assert.ThrowsAsync<ValidationException>(() => service.AddStockAsync(product.Id, quantity, cancellationToken));
         Assert.Equal(5, repository.Find(product.Id)?.Stock);
     }
 
@@ -186,7 +186,7 @@ public sealed class ProductServiceTests
         repository.Seed("Wireless Mouse");
         repository.Seed("Keyboard Cover");
 
-        var results = await service.SearchByNameAsync(" keyboard ", cancellationToken);
+        var results = await service.GetByNameAsync(" keyboard ", cancellationToken);
 
         Assert.Equal(["Keyboard Cover", "Mechanical Keyboard"], results.Select(p => p.Name));
     }
@@ -196,7 +196,7 @@ public sealed class ProductServiceTests
     [InlineData("   ")]
     public async Task SearchByNameAsync_BlankName_ThrowsValidationException(string name)
     {
-        await Assert.ThrowsAsync<ValidationException>(() => service.SearchByNameAsync(name, cancellationToken));
+        await Assert.ThrowsAsync<ValidationException>(() => service.GetByNameAsync(name, cancellationToken));
     }
 
     [Fact]
@@ -207,7 +207,7 @@ public sealed class ProductServiceTests
         repository.Seed("Edge", stock: 10);
         repository.Seed("High", stock: 11);
 
-        var results = await service.GetByStockLevelAsync(5, 10, cancellationToken);
+        var results = await service.GetStockByRangeAsync(5, 10, cancellationToken);
 
         Assert.Equal(["Low", "Edge"], results.Select(p => p.Name));
     }
@@ -218,6 +218,6 @@ public sealed class ProductServiceTests
     [InlineData(0, -1)]
     public async Task GetByStockLevelAsync_InvalidRange_ThrowsValidationException(int min, int max)
     {
-        await Assert.ThrowsAsync<ValidationException>(() => service.GetByStockLevelAsync(min, max, cancellationToken));
+        await Assert.ThrowsAsync<ValidationException>(() => service.GetStockByRangeAsync(min, max, cancellationToken));
     }
 }

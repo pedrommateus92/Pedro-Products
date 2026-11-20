@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-import { aProduct } from '../../../testing/test-data';
+import { mockProduct } from '../../../testing/test-data';
 import { Product } from '../product.model';
 import { ProductFormDialog } from './product-form-dialog';
 
@@ -58,7 +58,7 @@ describe('ProductFormDialog', () => {
       price: 24.99,
       stock: 12,
     });
-    const created = aProduct({ id: 100007, name: 'Desk Lamp', price: 24.99, stock: 12 });
+    const created = mockProduct({ id: 100007, name: 'Desk Lamp', price: 24.99, stock: 12 });
     request.flush(created);
 
     expect(close).toHaveBeenCalledWith(created);
@@ -84,7 +84,7 @@ describe('ProductFormDialog', () => {
   });
 
   it('prefills the form when editing and sends the row version', async () => {
-    const product = aProduct();
+    const product = mockProduct();
     const { close, http, user } = await setup(product);
 
     expect(screen.getByRole('heading', { name: 'Edit product' })).toBeInTheDocument();
@@ -109,7 +109,7 @@ describe('ProductFormDialog', () => {
   });
 
   it('explains an edit conflict and disables saving', async () => {
-    const { close, http, user } = await setup(aProduct());
+    const { close, http, user } = await setup(mockProduct());
 
     await user.click(screen.getByRole('button', { name: 'Save changes' }));
     http

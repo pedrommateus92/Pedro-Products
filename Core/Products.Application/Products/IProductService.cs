@@ -12,11 +12,11 @@ public interface IProductService
 
     Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);
 
-    Task<ProductResponse?> DecrementStockAsync(int id, int quantity, CancellationToken cancellationToken);
+    Task<ProductResponse?> DecreaseStockAsync(int id, int quantity, CancellationToken cancellationToken);
 
-    Task<ProductResponse?> AddToStockAsync(int id, int quantity, CancellationToken cancellationToken);
+    Task<ProductResponse?> AddStockAsync(int id, int quantity, CancellationToken cancellationToken);
 
-    Task<IReadOnlyList<ProductResponse>> SearchByNameAsync(string name, CancellationToken cancellationToken);
+    Task<IReadOnlyList<ProductResponse>> GetByNameAsync(string name, CancellationToken cancellationToken);
 
-    Task<IReadOnlyList<ProductResponse>> GetByStockLevelAsync(int min, int max, CancellationToken cancellationToken);
+    Task<IReadOnlyList<ProductResponse>> GetStockByRangeAsync(int min, int max, CancellationToken cancellationToken);
 }

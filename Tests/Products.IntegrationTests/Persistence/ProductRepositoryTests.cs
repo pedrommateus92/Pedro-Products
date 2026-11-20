@@ -37,7 +37,7 @@ public sealed class ProductRepositoryTests(SqlServerDatabaseFixture database)
         var results = await Task.WhenAll(Enumerable.Range(1, 25).Select(async _ =>
         {
             await using var context = database.CreateContext();
-            return await new ProductRepository(context).TryDecrementStockAsync(product.Id, 1, cancellationToken);
+            return await new ProductRepository(context).DecreaseStockAsync(product.Id, 1, cancellationToken);
         }));
 
         Assert.Equal(10, results.Count(succeeded => succeeded));
@@ -49,7 +49,7 @@ public sealed class ProductRepositoryTests(SqlServerDatabaseFixture database)
     {
         var product = await AddProductAsync("Scarce", stock: 2);
 
-        var succeeded = await WithRepositoryAsync(r => r.TryDecrementStockAsync(product.Id, 3, cancellationToken));
+        var succeeded = await WithRepositoryAsync(r => r.DecreaseStockAsync(product.Id, 3, cancellationToken));
 
         Assert.False(succeeded);
         Assert.Equal(2, (await GetAsync(product.Id))?.Stock);
@@ -60,7 +60,7 @@ public sealed class ProductRepositoryTests(SqlServerDatabaseFixture database)
     {
         var product = await AddProductAsync("Versioned", stock: 5);
 
-        await WithRepositoryAsync(r => r.TryDecrementStockAsync(product.Id, 1, cancellationToken));
+        await WithRepositoryAsync(r => r.DecreaseStockAsync(product.Id, 1, cancellationToken));
 
         Assert.NotEqual(product.RowVersion, (await GetAsync(product.Id))?.RowVersion);
     }
@@ -70,7 +70,7 @@ public sealed class ProductRepositoryTests(SqlServerDatabaseFixture database)
     {
         var product = await AddProductAsync("Restock", stock: 5);
 
-        var succeeded = await WithRepositoryAsync(r => r.TryIncrementStockAsync(product.Id, 7, cancellationToken));
+        var succeeded = await WithRepositoryAsync(r => r.IncreaseStockAsync(product.Id, 7, cancellationToken));
 
         Assert.True(succeeded);
         Assert.Equal(12, (await GetAsync(product.Id))?.Stock);
@@ -81,7 +81,7 @@ public sealed class ProductRepositoryTests(SqlServerDatabaseFixture database)
     {
         var product = await AddProductAsync("Overflow", stock: int.MaxValue - 1);
 
-        var succeeded = await WithRepositoryAsync(r => r.TryIncrementStockAsync(product.Id, 2, cancellationToken));
+        var succeeded = await WithRepositoryAsync(r => r.IncreaseStockAsync(product.Id, 2, cancellationToken));
 
         Assert.False(succeeded);
         Assert.Equal(int.MaxValue - 1, (await GetAsync(product.Id))?.Stock);
@@ -103,7 +103,7 @@ public sealed class ProductRepositoryTests(SqlServerDatabaseFixture database)
     public async Task UpdateAsync_StaleRowVersion_ThrowsConflictAndKeepsData()
     {
         var product = await AddProductAsync("Original");
-        await WithRepositoryAsync(r => r.TryIncrementStockAsync(product.Id, 1, cancellationToken));
+        await WithRepositoryAsync(r => r.IncreaseStockAsync(product.Id, 1, cancellationToken));
 
         await Assert.ThrowsAsync<ConflictException>(() => WithRepositoryAsync(r =>
             r.UpdateAsync(product.Id, p => p.Name = "Overwritten", product.RowVersion, cancellationToken)));
@@ -147,7 +147,7 @@ public sealed class ProductRepositoryTests(SqlServerDatabaseFixture database)
         await AddProductAsync($"{marker} Mechanical Keyboard");
         await AddProductAsync($"{marker} Wireless Mouse");
 
-        var results = await WithRepositoryAsync(r => r.SearchByNameAsync($"{marker} mechanical", cancellationToken));
+        var results = await WithRepositoryAsync(r => r.GetByNameAsync($"{marker} mechanical", cancellationToken));
 
         Assert.Equal([$"{marker} Mechanical Keyboard"], results.Select(p => p.Name));
     }
@@ -159,7 +159,7 @@ public sealed class ProductRepositoryTests(SqlServerDatabaseFixture database)
         await AddProductAsync($"{marker} 50% off");
         await AddProductAsync($"{marker} 500 pack");
 
-        var results = await WithRepositoryAsync(r => r.SearchByNameAsync($"{marker} 50%", cancellationToken));
+        var results = await WithRepositoryAsync(r => r.GetByNameAsync($"{marker} 50%", cancellationToken));
 
         Assert.Equal([$"{marker} 50% off"], results.Select(p => p.Name));
     }
@@ -172,7 +172,7 @@ public sealed class ProductRepositoryTests(SqlServerDatabaseFixture database)
         var upper = await AddProductAsync("Range upper", stock: 1_000_003);
         var above = await AddProductAsync("Range above", stock: 1_000_004);
 
-        var results = await WithRepositoryAsync(r => r.ListByStockRangeAsync(1_000_001, 1_000_003, cancellationToken));
+        var results = await WithRepositoryAsync(r => r.GetStockByRangeAsync(1_000_001, 1_000_003, cancellationToken));
         var ids = results.Select(p => p.Id).ToList();
 
         Assert.Contains(lower.Id, ids);

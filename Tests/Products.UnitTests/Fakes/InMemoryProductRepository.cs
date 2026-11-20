@@ -23,19 +23,19 @@ internal sealed class InMemoryProductRepository : IProductRepository
 
     public Product? Find(int id) => products.TryGetValue(id, out var product) ? Copy(product) : null;
 
-    public Task<IReadOnlyList<Product>> ListAsync(CancellationToken cancellationToken) =>
+    public Task<IReadOnlyList<Product>> GetAllAsync(CancellationToken cancellationToken) =>
         Result(products.Values.OrderBy(p => p.Id));
 
     public Task<Product?> GetByIdAsync(int id, CancellationToken cancellationToken) =>
         Task.FromResult(Find(id));
 
-    public Task<IReadOnlyList<Product>> SearchByNameAsync(string name, CancellationToken cancellationToken) =>
+    public Task<IReadOnlyList<Product>> GetByNameAsync(string name, CancellationToken cancellationToken) =>
         Result(products.Values
             .Where(p => p.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
             .OrderBy(p => p.Name)
             .ThenBy(p => p.Id));
 
-    public Task<IReadOnlyList<Product>> ListByStockRangeAsync(int min, int max, CancellationToken cancellationToken) =>
+    public Task<IReadOnlyList<Product>> GetStockByRangeAsync(int min, int max, CancellationToken cancellationToken) =>
         Result(products.Values
             .Where(p => p.Stock >= min && p.Stock <= max)
             .OrderBy(p => p.Stock)
@@ -70,10 +70,10 @@ internal sealed class InMemoryProductRepository : IProductRepository
     public Task<bool> ExistsAsync(int id, CancellationToken cancellationToken) =>
         Task.FromResult(products.ContainsKey(id));
 
-    public Task<bool> TryDecrementStockAsync(int id, int quantity, CancellationToken cancellationToken) =>
+    public Task<bool> DecreaseStockAsync(int id, int quantity, CancellationToken cancellationToken) =>
         Task.FromResult(TryChangeStock(id, p => p.Stock >= quantity, p => p.Stock - quantity));
 
-    public Task<bool> TryIncrementStockAsync(int id, int quantity, CancellationToken cancellationToken) =>
+    public Task<bool> IncreaseStockAsync(int id, int quantity, CancellationToken cancellationToken) =>
         Task.FromResult(TryChangeStock(id, p => p.Stock <= int.MaxValue - quantity, p => p.Stock + quantity));
 
     private bool TryChangeStock(int id, Func<Product, bool> guard, Func<Product, int> newStock)
