@@ -4,5 +4,6 @@
     <ShouldRunBuildScript>false</ShouldRunBuildScript>
     <ShouldRunNpmInstall>true</ShouldRunNpmInstall>
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist\products-web\browser\</BuildOutputFolder>
+    <DefaultItemExcludes>$(DefaultItemExcludes);coverage\**;dist\**;.angular\**</DefaultItemExcludes>
   </PropertyGroup>
 </Project>

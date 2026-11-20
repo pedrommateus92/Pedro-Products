@@ -10,7 +10,7 @@ A products management solution: a REST API built with ASP.NET Core on .NET 10, a
 Core/
 ├── Products.Domain             Entities
 ├── Products.Application        DTOs, validation, product service, repository contract
-└── Products.Infrastructure     EF Core: DbContext, migrations, repository, seeding
+└── Products.Infrastructure     EF Core: DbContext, migrations, repository
 Web/
 ├── Products.WebApi             ASP.NET Core API, OpenAPI, Swagger UI
 └── Products.WebApp             Angular app (Visual Studio JavaScript project, .esproj)
@@ -43,7 +43,7 @@ The API uses EF Core with SQL Server. The connection string `ProductsDb` in `Web
 dotnet user-secrets set "ConnectionStrings:ProductsDb" "<connection string>" --project Web/Products.WebApi
 ```
 
-In Development the API applies pending migrations and seeds five sample products on startup, so running it is enough to create the database. To do it by hand:
+In Development the API applies pending migrations on startup, so running it is enough to create the database. It starts empty: there is no demo data. To apply the migrations by hand:
 
 ```powershell
 dotnet tool restore

@@ -1,6 +1,8 @@
 using FluentValidation;
 using Products.Application;
 using Products.Application.Products;
+using Products.Application.Products.Dtos;
+using Products.Application.Products.Validators;
 using Products.UnitTests.Fakes;
 
 namespace Products.UnitTests.Products;

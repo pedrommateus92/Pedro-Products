@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Products.Application.Products;
+using Products.Application.Products.Dtos;
 
 namespace Products.WebApi.Controllers;
 

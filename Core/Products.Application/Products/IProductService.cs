@@ -1,3 +1,5 @@
+using Products.Application.Products.Dtos;
+
 namespace Products.Application.Products;
 
 public interface IProductService

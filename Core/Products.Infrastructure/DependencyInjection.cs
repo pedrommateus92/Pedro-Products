@@ -15,10 +15,7 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString(ConnectionStringName)
             ?? throw new InvalidOperationException($"Connection string '{ConnectionStringName}' is not configured.");
 
-        services.AddDbContext<ProductsDbContext>(options => options
-            .UseSqlServer(connectionString)
-            .UseSeeding((context, _) => ProductSeeder.Seed(context))
-            .UseAsyncSeeding((context, _, cancellationToken) => ProductSeeder.SeedAsync(context, cancellationToken)));
+        services.AddDbContext<ProductsDbContext>(options => options.UseSqlServer(connectionString));
 
         services.AddScoped<IProductRepository, ProductRepository>();
         return services;

@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
-/** RFC 9457 problem details, as returned by the API for every error. */
 export interface ProblemDetails {
   type?: string;
   title?: string;
@@ -16,7 +15,6 @@ function asProblem(error: unknown): ProblemDetails | null {
   return null;
 }
 
-/** A short, human-readable message for any HTTP error. */
 export function errorMessage(
   error: unknown,
   fallback = 'Something went wrong. Please try again.',
@@ -29,7 +27,6 @@ export function errorMessage(
   return problem?.detail ?? problem?.title ?? fallback;
 }
 
-/** Field errors from a 400 validation response, keyed by camelCase property name. */
 export function validationErrors(error: unknown): Record<string, string[]> {
   return asProblem(error)?.errors ?? {};
 }

@@ -1,5 +1,6 @@
 using FluentValidation;
 using FluentValidation.Results;
+using Products.Application.Products.Dtos;
 
 namespace Products.Application.Products;
 

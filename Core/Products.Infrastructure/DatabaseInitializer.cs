@@ -7,7 +7,7 @@ namespace Products.Infrastructure;
 public static class DatabaseInitializer
 {
     /// <summary>
-    /// Applies pending migrations and runs the seeding configured on the DbContext.
+    /// Applies pending migrations, creating the database if it does not exist yet.
     /// </summary>
     public static async Task MigrateDatabaseAsync(this IServiceProvider services, CancellationToken cancellationToken = default)
     {

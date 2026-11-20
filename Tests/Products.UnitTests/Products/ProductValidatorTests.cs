@@ -1,4 +1,5 @@
-using Products.Application.Products;
+using Products.Application.Products.Dtos;
+using Products.Application.Products.Validators;
 
 namespace Products.UnitTests.Products;
 
